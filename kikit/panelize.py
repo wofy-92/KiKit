@@ -431,6 +431,8 @@ def cropZoneByPolygon(zone: pcbnew.ZONE, polygon: Polygon) -> None:
     zone.Outline().RemoveAllContours()
     geoms = [intersection] if isinstance(intersection, Polygon) else intersection.geoms
     for geom in geoms:
+        if not hasattr(geom, "exterior"):
+            continue
         zone.Outline().AddOutline(linestringToKicad(geom.exterior))
         for hole in geom.interiors:
             zone.Outline().AddHole(linestringToKicad(hole))
