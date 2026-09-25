@@ -1,6 +1,18 @@
+import importlib
 import pcbnew
+import kikit
 
 from kikit.pcbnew_utils import duplicateZone
+
+
+def testMissingSwigIteratorNext(monkeypatch):
+    board = pcbnew.BOARD()
+    board.Add(pcbnew.PCB_SHAPE(board))
+    monkeypatch.delattr(pcbnew.SwigPyIterator, "next")
+
+    importlib.reload(kikit)
+
+    assert len(board.GetDrawings()) == 1
 
 
 def testDuplicateZoneUsesNewSignature():
